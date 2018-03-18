@@ -3,17 +3,41 @@
     <head>
         <meta charset="utf-8" />
         <title>Add Scores to Publisher Entries</title>
+        <style>
+            body {
+                max-width: 640px;
+                margin: auto auto;
+                font-family: Verdana;
+            }
+            h1 {
+                font-weight: normal;
+            }
+            p, ul {
+                line-height: 150%
+            }
+            img {
+                max-width: 100%;
+            }
+            p.warning {
+                text-align: center;
+                font-weight: bold;
+                border: 1px solid black;
+                padding: 1em;
+            }
+        </style>
     </head>
     <body>
-        <h1>Help, Brave is broken!</h1>
-        <p>If Brave opened up without any tabs (see <a href='https://github.com/brave/browser-laptop/issues/13488'>this issue</a>), and refuses to open new tabs, you may have a slightly corrupted state file. This page may help you resolve that.</p>
-        <p>Start by locating your session-store-1 file:</p>
+        <h1>Does your browser look like this?</h1>
+        <img src="session-store-rescore.png">
+        <p>If your browser has opened in the above state (see <a href='https://github.com/brave/browser-laptop/issues/13488'>this issue</a>), this page may be able to help you.</p>
+        <p>First, we'll need to locate the <code>session-store-1</code> file on your machine. This file helps Brave remember what your workspace looked like before closing. It will create, position, size, and setup your browser windows.</p>
+        <p>The <code>session-store-1</code> location depends on your operating system:</p>
         <ul>
-            <li>Windows: <pre>%appdata%/brave/session-store-1</pre></li>
-            <li>macOS: <pre>~/Library/Application\ Support/brave/session-store-1</pre></li>
+            <li>Windows: <code>%appdata%/brave/session-store-1</code></li>
+            <li>macOS: <code>~/Library/Application\ Support/brave/session-store-1</code></li>
         </ul>
-        <p>Once you've located that file, drag and drop it onto this page. A new session-store-1 will be downloaded.</p>
-        <p><strong>Keep your original session-store-1</strong>; you can rename it to something like <em>session-store-1-broken</em>.</p>
+        <p>Once you've located that file, drag and drop it onto this page. A replacement file will be downloaded automatically.</p>
+        <p class="warning">DO NOT REPLACE WITHOUT FIRST CREATING A BACKUP</p>
         <script>
             function invokeDownload (contents) {
                 var a = document.createElement('a')
