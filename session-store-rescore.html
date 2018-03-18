@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Add Scores to Publisher Entries</title>
+    </head>
+    <body>
+        <h1>Help, Brave is broken!</h1>
+        <p>If Brave opened up without any tabs (see <a href='https://github.com/brave/browser-laptop/issues/13488'>this issue</a>), and refuses to open new tabs, you may have a slightly corrupted state file. This page may help you resolve that.</p>
+        <p>Start by locating your session-store-1 file:</p>
+        <ul>
+            <li>Windows: <pre>%appdata%/brave/session-store-1</pre></li>
+            <li>macOS: <pre>~/Library/Application\ Support/brave/session-store-1</pre></li>
+        </ul>
+        <p>Once you've located that file, drag and drop it onto this page. A new session-store-1 will be downloaded.</p>
+        <p><strong>Keep your original session-store-1</strong>; you can rename it to something like <em>session-store-1-broken</em>.</p>
+        <script>
+            function invokeDownload (contents) {
+                var a = document.createElement('a')
+                a.download = 'session-store-1'
+                a.href = URL.createObjectURL(new Blob([contents], {type: 'application/json'}))
+                document.body.appendChild(a)
+                a.click()
+            }
+
+            document.addEventListener('dragover', function (e) {
+                e.preventDefault()
+            })
+
+            document.addEventListener('drop', function (e) {
+                e.preventDefault();
+                var file = e.dataTransfer.files.item(0)
+                if (file.name === "session-store-1") {
+                    var reader = new FileReader()
+                    reader.addEventListener('load', function (data) {
+                        var entry, state = JSON.parse(reader.result)
+                        var publishers = state.ledger.synopsis.publishers
+                        for (entry in publishers) {
+                            publishers[entry].scores = publishers[entry].scores || {}
+                        }
+                        invokeDownload(JSON.stringify(state))
+                    })
+                    reader.readAsText(file)
+                }
+            })
+        </script>
+    </body>
+</html>
