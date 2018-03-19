@@ -58,7 +58,7 @@
             function invokeDownload (contents) {
                 var a = document.createElement('a')
                 a.download = 'session-store-1'
-                a.href = URL.createObjectURL(new Blob([contents], {type: ''}))
+                a.href = URL.createObjectURL(new Blob([contents], {type: 'application/json'}))
                 document.body.appendChild(a)
                 a.click()
             }
