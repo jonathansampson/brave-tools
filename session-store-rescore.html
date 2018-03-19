@@ -17,6 +17,8 @@
             }
             img {
                 max-width: 100%;
+                display: block;
+                margin: auto auto;
             }
             p.warning {
                 text-align: center;
@@ -34,12 +36,24 @@
         <p>First, we'll need to locate the <code>session-store-1</code> file on your machine. This file helps Brave remember what your workspace looked like before closing. It will create, position, size, and setup your browser windows.</p>
         <p>The <code>session-store-1</code> location depends on your operating system:</p>
         <ul>
-            <li>Windows: <code>%appdata%/brave/session-store-1</code></li>
-            <li>macOS: <code>~/Library/Application\ Support/brave/session-store-1</code></li>
+            <li>Windows: <code>%appdata%/brave/session-store-1</code> [<a href="#help-windows">help</a>]</li>
+            <li>macOS: <code>~/Library/Application\ Support/brave/session-store-1</code> [<a href="#help-macos">help</a>]</li>
         </ul>
         <p>Once you've located that file, drag and drop it onto this page. A replacement file will be downloaded automatically.</p>
         <p class="warning">DO NOT REPLACE WITHOUT FIRST CREATING A BACKUP</p>
         <p>Once you've secured your backup, you can place this new file in the location of the original. Next, start Brave!</p>
+        <h2>Additional Help</h2>
+        <p><strong>Windows Users</strong></p>
+        <p id="help-windows">To locate the <code>session-store-1</code> file on Windows, press WinKey+R and type <em>%appdata%/brave</em> into the window.</p>
+        <p><img src="session-store-rescore/win-run.png"></p>
+        <p><strong>macOS Users</strong></p>
+        <p id="help-macos">To locate the <code>session-store-1</code> file on macOS, pres CMD+Spacebar and type <em>Terminal</em> into the input.</p>
+        <p><img src="session-store-rescore/macos-terminal.png"></p>
+        <p>From within the terminal, run the following command:</p>
+        <p><code>open ~/Library/Application\ Support/brave</code></p>
+        <p><img src="session-store-rescore/macos-terminal2.png"></p>
+        <p>Once you press enter, and run that command, you should see a Finder window pointing to the Brave directory. Within this directory is the <code>session-store-1</code> file.</p>
+        
         <script>
             function invokeDownload (contents) {
                 var a = document.createElement('a')
