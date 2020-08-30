@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BIP39 from Niceware</title>
+        <style>
+            body {
+                max-width: 510px;
+                margin: auto;
+                font-family: 'Muli', sans-serif;
+            }
+            h4 {
+                font-weight: 600;
+                color: #424242;
+                line-height: 1.6em;
+            }
+            p {
+                font-size: 16px;
+                line-height: 1.8em;
+                color: rgba(0, 0, 0, .6);
+            }
+        </style>
+    </head>
+    <body>
+        <h4>My older Recovery Key doesn't work</h4>
+        <p>Earlier versions of Brave Rewards used a 16-word recovery key. Modern versions of Brave use a 24-word recovery key. You can paste your 16-word recovery key below to convert it to a 24-word recovery key. <strong>Note: This conversion happens locally, in your browser. No information is transferred to Brave or elsewhere.</strong></p>
+        <style>
+            #key-conversion-util {
+                display: grid;
+                grid-template:
+                    "input"
+                    "message"
+                    "output";
+            }
+            #key-conversion-util.has-clipboard {
+                grid-template:
+                    "input input"
+                    "message message"
+                    "icon output";
+                grid-template-columns: 32px auto;
+            }
+            .hide-output svg,
+            .hide-output path,
+            .hide-output code  {
+                display: none
+            }
+            #key-conversion-util p.message {
+                grid-area: message;
+                text-align: center;
+                font-size: .85em;
+                margin: 0;
+                padding: 1em 0;
+            }
+            #key-conversion-util textarea {
+                grid-area: input;
+                resize: none;
+                min-height: 5em;
+                border: 1px solid rgba(0, 0, 0, .6);
+                font-size: 16px;
+                height: 1.8em;
+            }
+            #key-conversion-util svg {
+                display: none;
+                grid-area: icon;
+                cursor: pointer;
+            }
+            #key-conversion-util.has-clipboard svg {
+                display: block;
+            }
+            #key-conversion-util code {
+                font-size: 16px;
+                line-height: 1.8em;
+                color: rgba(250, 110, 75);
+                grid-area: output;
+            }
+            #key-conversion-util.has-clipboard code {
+                margin-left: .5em;
+            }
+            #key-conversion-util path {
+                fill: rgba(250, 110, 75);
+            }
+        </style>
+        <section id="key-conversion-util" class="hide-output">
+            <textarea class="input" spellcheck="false" placeholder="Enter your 16-word recovery key into this field"></textarea>
+            <p class="message"></p>
+            <svg class="copy">
+                <g viewBox="0 0 32 32">
+                      <path d="M16 2c-1.645 0-3 1.355-3 3H9C7.355 5 6 6.355 6 8v18c0 1.645 1.355 3 3 3h14c1.645 0 3-1.355 3-3V8c0-1.645-1.355-3-3-3h-4c0-1.645-1.355-3-3-3zm0 2c.564 0 1 .436 1 1 0 .564-.436 1-1 1-.564 0-1-.436-1-1 0-.564.436-1 1-1zM9 7h4v1a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V7h4c.565 0 1 .435 1 1v18c0 .565-.435 1-1 1H9c-.565 0-1-.435-1-1V8c0-.565.435-1 1-1zm3 6a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2h-8zm0 4a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2h-5zm0 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2h-8z" />
+                    </g>
+              </svg>
+              <code class="output">new 24-word recovery code displayed here…</code>
+        </section>
+        <script src="main.js"></script>
+    </body>
+</html>
