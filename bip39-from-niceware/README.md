@@ -10,7 +10,7 @@ This small repo is meant to hold a duplicate, and _more easily scrutable_ copy o
 
 ## Converter on GitHub Pages
 
-This repository contains more than the source code for reviewing this conversion utility; it also contains the built solution, allowing you to use the utility in your browser. If you are comfortable performing the conversion here on GitHub, you can do so by visiting https://jonathansampson.github.io/brave-tools/bip39-from-niceware/dist/.
+This repository contains more than the source code for reviewing this conversion utility; it also contains the built solution, allowing you to use the utility in your browser. If you are comfortable performing the conversion here on GitHub, you can do so [here](https://jonathansampson.github.io/brave-tools/bip39-from-niceware/dist/).
 
 If you are not comfortable performing this conversion on GitHub, please consider alternative options below.
 
