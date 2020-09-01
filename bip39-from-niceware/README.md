@@ -12,7 +12,7 @@ Additionally, this respository exists for those who would like to scrutinize the
 
 The easiest way to perform this conversion is here on GitHub, via the [utility page]. This approach requires you to paste your 16-word receovery key into github.com, which may make some users uncomfortable. This page is not designed to perform any network activity; no calls should be made to retrieve a word-list, or any other logic to perform the conversion. As such, you should not expect to see your browser making requests or transmitting any of the _recovery key data_ anywhere.
 
-If you would like to see _exactly_ what this conversion utility does, you can inspect the source in src/index.js.
+If you would like to see _exactly_ what this conversion utility does, you can inspect the source in [src/index.js](src/index.js).
 
 For those who would rather clone, build, and run this utility locally, other options exist.
 
