@@ -1,26 +1,22 @@
 If there are any questions regarding this document or project, please message [@BraveSampson] on Twitter.
 
-# Description
+# Background and Explanation
 
 In 2017 [Brave] used the [Niceware library][niceware] to generate _random-yet-memorable_ passphrases (or, "recovery key") for Brave Rewards (at the time called _Brave Payments_). These phrases were 16-words long, and were generated from a wordlist containing 65,536 distinct words. Not too long afterwards, the decision to use [BIP39] was made instead.
 
 This small repo is meant to hold a duplicate, and _more easily scrutable_ copy of the in-situ tool offered on https://brave.com/faq/#convert-old-keys. With this tool, users who happen to have one of the older Niceware-derived recovery keys can easily convert those keys into a 24-word BIP39 recovery key.
 
-# Usage Options
-
-## Brave FAQ Converter
-
-This embeded module does not send or receive words, passphrases, or bytes outside of the initial download of the bundled Niceware and BIP39 libraries themselves, and this is prior to any user-interaction takes place. You can use this utility to convert your older keys if you like. If you are uncomfortable with this approach, consider the following options.
+# Conversion Options
 
 ## Converter on GitHub Pages
 
-I've provided more than the source files in this repo. I also included the `dist/` output, so that you can access the same module here on GitHub. Here you can also open your browser's developer tools and monitor the network activity if you'd like to make sure nothing is going across the wire.
+This repository contains more than the source code for reviewing this conversion utility; it also contains the built solution, allowing you to use the utility in your browser. If you are comfortable performing the conversion here on GitHub, you can do so by visiting https://jonathansampson.github.io/brave-tools/bip39-from-niceware/dist/.
 
-See https://jonathansampson.github.io/brave-tools/bip39-from-niceware/dist/
+If you are not comfortable performing this conversion on GitHub, please consider alternative options below.
 
 ## Run Locally via `localhost`
 
-If you're comfortable with GitHub, you can clone this repository, build it locally, and run it from _localhost_. For this approach, you'll need to have [git] and [nodejs] installed, as well as know how to stand-up a localhost server. Be sure to set `/dist` as the root when you launch your localhost server.
+To perform this conversion on yoru own machine, you can clone this repository, build it locally, and run it from _localhost_. For this approach, you'll need to have [git] and [nodejs] installed, as well as know how to stand-up a localhost server. Be sure to set `/dist` as the root when you launch your localhost server.
 
 ## Run Locally via Command-Line
 
@@ -46,10 +42,6 @@ The first phrase is converted into a Buffer whose bytes are then sent to BIP39 t
 | Niceware (16-words) | Bytes (32) | BIP39 (24-words) |
 | :------- | :---- | :---- |
 | wreath feint durneder worrier jenny ladrone pinochle nonelective secrete seemed overcrowding kiln refusing vaccination haploidy garnishable | 253, 253, 77, 65, 64, 197, 253, 175, 115, 157, 119, 248, 162, 46, 144, 137, 196, 227, 197, 71, 152, 22, 118, 78, 181, 233, 243, 144, 96, 96, 87, 140 | worth tuna expect light garlic stumble solar puzzle…s iron interest kidney transfer alcohol coral funny nurse |
-
-## Run via RunKit.com
-
-I've uploaded a small node-app to https://runkit.com/jonathansampson/convert-16-word-niceware-into-24-word-bip39. You can modify the words provided in that source to reflect your own 16-word key recovery phrase, and execute the code.
 
 [git]: https://git-scm.com/downloads
 [nodejs]: https://nodejs.org/
