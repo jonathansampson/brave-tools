@@ -69,7 +69,9 @@
 
                 // Gather the current Balance and Payment history
                 const BALANCE = source.ads_rewards.grants_balance
-                const PAYMENTS = source.ads_rewards.payments
+                const PAYMENTS = source.ads_rewards.payments.sort((a, b) => {
+                    return a.month.replace("-") > b.month.replace("-") ? 1 : -1
+                })
 
                 // Draw our multi-series (Payments, Transactions, etc.) chart
                 const context = document.querySelector("canvas").getContext("2d")
