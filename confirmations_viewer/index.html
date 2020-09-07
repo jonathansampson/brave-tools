@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Viewer for \rewards_service\confirmations.json</title>
+        <style>
+            html {
+                padding: 3em;
+                overflow: hidden;
+                background: #f0f0f0;
+                font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+        </style>
+        <!-- Including non-minified script(s) intentionally -->
+        <script src="Chart.bundle.js"></script>
+        <script>
+
+            const DEBUG = false;
+
+            const tellUser = message => {
+                document.querySelector(".status").innerHTML = message
+            }
+
+            const init = () => {
+
+                // For testing purposes, let's pull from cache
+                if (DEBUG) {
+                    const CACHE = localStorage.getItem("cache")
+                    if (CACHE) {
+                        setup(JSON.parse(CACHE))
+                        console.log("Restoring from Cache")
+                        return
+                    }
+                }
+
+                const FILENAME = "confirmations.json"
+
+                // To prevent navigate-on-drop, preventDefault on dragover/drop
+                document.addEventListener("dragover", e => { e.preventDefault() })
+                document.addEventListener("drop",     e => { e.preventDefault()
+                    // Get a reference to the dropped file
+                    const file = e.dataTransfer.files.item(0)
+                    // Confirm that it is the file we're expecting
+                    if (file.name === FILENAME) {
+                        // Prepare to read the file
+                        const reader = new FileReader()
+                        // When the file has been parsed, send to the 'setup' function
+                        reader.addEventListener("load", () => {
+                            try {
+                                // This may throw if it can't be parsed as JSON
+                                setup( JSON.parse(reader.result) )
+                                tellUser("Thank you. Now drawing chart.")
+                            } catch (e) {
+                                tellUser("The file could not be parsed as JSON.")
+                            }
+                        })
+                        // Read the file
+                        reader.readAsText(file)
+                    } else {
+                        tellUser(`I'm sorry, but <code>${file.name}</code> isn't the correct file.`)
+                    }
+                })
+            }
+
+            const setup = source => {
+
+                if (DEBUG) {
+                    localStorage.setItem("cache", JSON.stringify(source))
+                }
+
+                // Gather the current Balance and Payment history
+                const BALANCE = source.ads_rewards.grants_balance
+                const PAYMENTS = source.ads_rewards.payments
+
+                // Draw our multi-series (Payments, Transactions, etc.) chart
+                const context = document.querySelector("canvas").getContext("2d")
+
+                const data = {
+                    datasets: [
+                        {
+                            label: "Balance",
+                            yAxisID: "B",
+                            data: PAYMENTS.map(entry => entry.balance),
+                            backgroundColor: "rgb(251,84,43)"
+                        },
+                        {
+                            label: "Transactions",
+                            yAxisID: "T",
+                            data: PAYMENTS.map(entry => entry.transaction_count),
+                            type: "line",
+                            fill: false,
+                            borderColor: "rgb(163, 39, 143)"
+                        }
+                    ],
+                    labels: PAYMENTS.map(entry => entry.month)
+                }
+
+                const options = {
+                    scales: {
+                        yAxes: [
+                            {
+                                id: "B",
+                                type: "linear",
+                                position: "left",
+                                ticks: { min: 0, max: 50 }
+                            },
+                            {
+                                id: "T",
+                                type: "linear",
+                                position: "right",
+                                ticks: { min: 0, max: 500 }
+                            }
+                        ]
+                    }
+                }
+
+                // Render the Chart
+                new Chart(context, { type: "bar", data, options })
+            }
+
+            document.addEventListener("DOMContentLoaded", init)
+        </script>
+    </head>
+    <body>
+        <h1>Viewer for <code>\rewards_service\confirmations.json</code></h1>
+        <p class="status">Please locate your file, then drop it here to continue.</p>
+        <canvas></canvas>
+    </body>
+</html>
