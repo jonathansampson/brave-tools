@@ -82,7 +82,8 @@
                             label: "Balance",
                             yAxisID: "B",
                             data: PAYMENTS.map(entry => entry.balance),
-                            backgroundColor: "rgb(251,84,43)"
+                            backgroundColor: "rgb(251,84,43)",
+                            order: 1
                         },
                         {
                             label: "Transactions",
@@ -103,13 +104,14 @@
                                 id: "B",
                                 type: "linear",
                                 position: "left",
-                                ticks: { min: 0, max: 50 }
+                                ticks: { min: 0, max: Math.ceil(Math.max(...data.datasets[0].data) * 1.1 / 10) * 10 }
                             },
                             {
                                 id: "T",
                                 type: "linear",
                                 position: "right",
-                                ticks: { min: 0, max: 500 }
+                                gridLines: false,
+                                ticks: { padding: 10, min: 0, max: Math.ceil(Math.max(...data.datasets[1].data) * 1.1 / 10) * 10 }
                             }
                         ]
                     }
