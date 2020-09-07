@@ -82,7 +82,15 @@
                             label: "Balance",
                             yAxisID: "B",
                             data: PAYMENTS.map(entry => entry.balance),
-                            backgroundColor: "rgb(251,84,43)",
+                            backgroundColor: context => {
+                                const date = new Date
+                                const month = data.labels[context.dataIndex].split("-")
+                                if (month[0] == date.getFullYear() && month[1] == (1 + date.getMonth())) {
+                                    return "rgb(52, 53, 70)"
+                                } else {
+                                    return "rgb(251, 84, 43)"
+                                }
+                            },
                             order: 1
                         },
                         {
