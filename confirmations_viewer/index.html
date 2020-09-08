@@ -10,21 +10,71 @@
                 font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
 
-            body {
+            body.show-help #help {
+                display: grid;
+            }
+
+            #help {
+                display: none;
+                grid-template:
+                    "title title"
+                    "windows macos";
+                position: absolute;
+                padding: 3em;
+                top: 0; left: 0; right: 0;
+                background: rgba(240, 240, 240, .75);
+                backdrop-filter: blur(2px);
+                box-shadow: 0 0 3em rgba(0, 0, 0, .25);
+            }
+
+                #help .windows {
+                    grid-area: windows;
+                }
+
+                #help .macos {
+                    grid-area: macos;
+                }
+
+                #help kbd {
+                    border: 1px solid #aaa;
+                    padding: .11em .3em;
+                    border-radius: 5%;
+                    box-shadow: 1px 1px 0 rgba(0, 0, 0, .5);
+                    background: whitesmoke;
+                }
+
+            #app {
                 display: grid;
                 grid-template:
                     "title button"
                     "chart chart";
             }
 
-            button {
+            #app button {
                 grid-area: button;
                 padding: .25em 1em;
             }
 
-            section {
+            section.title {
                 grid-area: title;
             }
+                span.dismiss, span.help {
+                    display: inline-block;
+                    color: #f0f0ff;
+                    background: rgba(0, 0, 0, .75);
+                    width: 1.5em; height: 1.5em;
+                    text-align: center; vertical-align: middle;
+                    border-radius: 50%;
+                    font-size: .7em;
+                    padding: .1em;
+                    font-weight: normal;
+                    cursor: pointer;
+                }
+
+                span.dismiss {
+                    font-size: .5em;
+                    background: rgb(251,84,43);
+                }
 
             canvas {
                 margin: auto;
@@ -41,7 +91,14 @@
                 document.querySelector(".status").innerHTML = message
             }
 
-            // I'm not proud of this, but it gets the job done
+            const showHelp = (show) => {
+                if (show) {
+                    document.body.classList.add("show-help")
+                } else {
+                    document.body.classList.remove("show-help")
+                }
+            }
+
             const savePNG = () => {
                 const el = document.createElement("a")
                 el.download = "confirmations.png"
@@ -50,6 +107,10 @@
             }
 
             const init = () => {
+
+                const FILENAME = "confirmations.json"
+
+                document.querySelector("button").addEventListener("click", savePNG)
 
                 // For testing purposes, let's pull from cache
                 if (DEBUG) {
@@ -61,9 +122,8 @@
                     }
                 }
 
-                const FILENAME = "confirmations.json"
-
-                document.querySelector("button").addEventListener("click", savePNG)
+                document.querySelector(".help").addEventListener("click", showHelp.bind(this, true))
+                document.querySelector(".hide").addEventListener("click", showHelp.bind(this, false))
 
                 // To prevent navigate-on-drop, preventDefault on dragover/drop
                 document.addEventListener("dragover", e => { e.preventDefault() })
@@ -183,11 +243,42 @@
         </script>
     </head>
     <body>
-        <button hidden>Save PNG</button>
-        <section>
-            <h1>Viewer for <code>\rewards_service\confirmations.json</code></h1>
-            <p class="status">Please locate your file, then drop it here to continue.</p>
-        </section>
-        <canvas></canvas>
+        <div id="app">
+            <button hidden>Save PNG</button>
+            <section class="title">
+                <h1>Viewer for <code>\rewards_service\confirmations.json</code> <span class="help">?</span></h1>
+                <p class="status">Please locate your file, then drop it here to continue.</p>
+            </section>
+            <canvas></canvas>
+        </div>
+        <div id="help">
+            <section>
+                <button class="hide">Close</button>
+                <h1>Where can I find this file?</h1>
+            </section>
+            <section class="windows">
+                <h3>Windows Users</h3>
+                <ol>
+                    <li>Press <kbd>Windows Key + E</kbd> to open an Explorer Window</li>
+                    <li>Press <kbd>Ctrl + L</kbd> to focus the address bar of the window</li>
+                    <li>Type <code>%localappdata%</code> and press Enter on the keyboard</li>
+                    <li>Open <code>/BraveSoftware/Brave-Browser/User Data/</code></li>
+                    <li>Open the folder for your Brave profile (<code>/Default</code>, for most users)</li>
+                    <li>Open the <code>/rewards_service</code> folder</li>
+                    <li>You should now see the <code>confirmations.json</code> file</li>
+                </ol>
+            </section>
+            <section class="macos">
+                <h3>macOS Users</h3>
+                <ol>
+                    <li>Open <em>Finder</em> from your dock</li>
+                    <li>From the <em>Go</em> menu on your toolbar, select <em>Library</em></li>
+                    <li>Now click into <code>/Application Support/BraveSoftware/Brave-Browser/</code></li>
+                    <li>Open the folder for your Brave profile (<code>/Default</code>, for most users)</li>
+                    <li>Open the <code>/rewards_service</code> folder</li>
+                    <li>You should now see the <code>confirmations.json</code> file</li>
+                </ol>
+            </section>
+        </div>
     </body>
 </html>
