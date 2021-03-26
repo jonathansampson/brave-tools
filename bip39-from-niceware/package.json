@@ -11,11 +11,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "webpack": "^4.44.1",
+    "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "bip39": "^3.0.2",
+    "bip39": "^3.0.3",
     "niceware": "^2.0.1"
   }
 }
