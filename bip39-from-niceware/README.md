@@ -31,7 +31,7 @@ The first phrase is converted into a Buffer whose bytes are then sent to a BIP39
 
 | Niceware (16-words) | Bytes (32) | BIP39 (24-words) |
 | :------- | :---- | :---- |
-| wreath feint durneder worrier jenny ladrone pinochle nonelective secrete seemed overcrowding kiln refusing vaccination haploidy garnishable | 253, 253, 77, 65, 64, 197, 253, 175, 115, 157, 119, 248, 162, 46, 144, 137, 196, 227, 197, 71, 152, 22, 118, 78, 181, 233, 243, 144, 96, 96, 87, 140 | worth tuna expect light garlic stumble solar puzzle…s iron interest kidney transfer alcohol coral funny nurse |
+| wreath feint durneder worrier jenny ladrone pinochle nonelective secrete seemed overcrowding kiln refusing vaccination haploidy garnishable | 253, 253, 77, 65, 64, 197, 253, 175, 115, 157, 119, 248, 162, 46, 144, 137, 196, 227, 197, 71, 152, 22, 118, 78, 181, 233, 243, 144, 96, 96, 87, 140 | worth tuna expect light garlic stumble solar puzzle weather badge picnic bean evolve tired bunker actress iron interest kidney transfer alcohol coral funny nurse |
 
 ## Run Locally via `localhost`
 
