@@ -166,7 +166,10 @@
                 document.querySelector("button").hidden = false
 
                 // Gather the current Balance and Payment history
-                const BALANCE = source.ads_rewards.grants_balance
+                const BALANCE = source.ads_rewards.payments.reduce(( a, b) => {
+                    return a += b.balance
+                }, 0).toFixed(2)
+
                 const PAYMENTS = source.ads_rewards.payments.sort((a, b) => {
                     return a.month.replace("-") > b.month.replace("-") ? 1 : -1
                 })
