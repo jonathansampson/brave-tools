@@ -14,4 +14,4 @@ export interface Day {
   hours: Hour[];
 }
 
-export declare type Week = Day[];
+export declare type History = Day[];

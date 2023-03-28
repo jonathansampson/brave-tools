@@ -1,6 +1,23 @@
-import { Hour, Day, Week, AdRecord } from "./types";
+import { Hour, Day, History, AdRecord } from "./types";
+
+const HISTORY_DEPTH = 30;
+const TEMPLATES = {} as Record<string, HTMLTemplateElement>;
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Locate the template elements
+  TEMPLATES.day = document.getElementById(
+    "day-template"
+  ) as HTMLTemplateElement;
+  TEMPLATES.chart = document.getElementById(
+    "chart-template"
+  ) as HTMLTemplateElement;
+  TEMPLATES.hour = document.getElementById(
+    "hour-template"
+  ) as HTMLTemplateElement;
+  TEMPLATES.table = document.getElementById(
+    "table-template"
+  ) as HTMLTemplateElement;
+
   document.documentElement.addEventListener("drop", handleDrop);
   document.documentElement.addEventListener("dragover", (event) =>
     event.preventDefault()
@@ -20,15 +37,15 @@ async function handleDrop(event: DragEvent) {
   }
 
   const json = await readJSON(event.dataTransfer?.files[0]);
-  const week = getLastWeek(json);
+  const week = getHistory(json);
 
-  renderWeek(week);
+  renderHistory(week);
 }
 
-function renderWeek(week: Week): void {
-  console.log(week);
+function renderHistory(history: History): void {
+  console.log(history);
 
-  if (!Array.isArray(week) || week.length === 0) {
+  if (!Array.isArray(history) || history.length === 0) {
     return;
   }
 
@@ -36,61 +53,54 @@ function renderWeek(week: Week): void {
 
   daysElement.innerHTML = "";
 
-  const maxAdsShown = week.reduce((max, day) => {
+  const maxAdsShown = history.reduce((max, day) => {
     const dayMax = day.hours.reduce((dayMax, hour) => {
       return Math.max(dayMax, hour.adsShown.length);
     }, 0);
     return Math.max(max, dayMax);
   }, 0);
 
-  for (const day of week) {
-    const dayDiv = document.createElement("div");
-    const dayName = document.createElement("h2");
-    const dayChart = document.createElement("div");
-    const dayTable = getDayTable(day);
+  for (const day of history) {
+    const dayCard = TEMPLATES.day.content.cloneNode(true) as DocumentFragment;
+    const chartFragment = TEMPLATES.chart.content.cloneNode(
+      true
+    ) as DocumentFragment;
+    const chartElement = chartFragment.children[0] as HTMLElement;
 
-    dayDiv.classList.add("day");
-    dayChart.classList.add("chart");
+    const cardTitle = dayCard.querySelector<HTMLElement>(".card-title")!;
+    const cardBody = dayCard.querySelector<HTMLElement>(".card-body")!;
 
-    dayName.innerText = `${day.date.toLocaleDateString("en-US", {
+    cardTitle.innerText = `${day.date.toLocaleDateString("en-US", {
+      month: "short",
       weekday: "short",
     })} ${day.date.getDate()}`;
 
-    dayDiv.append(dayName, dayChart, dayTable);
-
     for (const hour of day.hours) {
-      const hourDiv = document.createElement("div");
+      const hourFragment = TEMPLATES.hour.content.cloneNode(
+        true
+      ) as DocumentFragment;
+      const hourElement = hourFragment.children[0] as HTMLElement;
 
-      hourDiv.classList.add("hour");
-      hourDiv.dataset.hour = hour.hour.toString();
-      hourDiv.dataset.ads = hour.adsShown.length.toString();
+      hourElement.dataset.hour = hour.hour.toString();
+      hourElement.dataset.ads = hour.adsShown.length.toString();
+      hourElement.style.height = `${
+        (hour.adsShown.length / maxAdsShown) * 100
+      }%`;
 
-      hourDiv.style.height = `${(hour.adsShown.length / maxAdsShown) * 100}%`;
-
-      dayChart.appendChild(hourDiv);
+      chartElement.appendChild(hourElement);
     }
 
-    daysElement.appendChild(dayDiv);
+    cardBody.append(chartFragment, getDayTable(day));
+
+    daysElement.appendChild(dayCard);
   }
 }
 
 function getDayTable(day: Day): HTMLTableElement {
-  const table = document.createElement("table");
-  const thead = document.createElement("thead");
-  const tbody = document.createElement("tbody");
-
-  table.append(thead, tbody);
-
-  const headerRow = document.createElement("tr");
-  const headerHourCell = document.createElement("th");
-  const headerCountCell = document.createElement("th");
-
-  headerHourCell.innerText = "Hour";
-  headerCountCell.innerText = "Ads";
-
-  headerRow.append(headerHourCell, headerCountCell);
-
-  thead.appendChild(headerRow);
+  const tableFragment = TEMPLATES.table.content.cloneNode(
+    true
+  ) as DocumentFragment;
+  const tableElement = tableFragment.children[0] as HTMLTableElement;
 
   for (const hour of day.hours) {
     if (hour.adsShown.length === 0) continue;
@@ -104,33 +114,33 @@ function getDayTable(day: Day): HTMLTableElement {
 
     dayRow.append(dayCell, dayCountCell);
 
-    tbody.appendChild(dayRow);
+    tableElement.tBodies[0].appendChild(dayRow);
   }
 
-  return table;
+  return tableElement;
 }
 
-function getLastWeek(json: any): Week {
+function getHistory(json: any): History {
   const today = new Date();
-  const week = [] as Week;
-  const oneWeekAgo = new Date(
+  const history = [] as History;
+  const startDate = new Date(
     today.getFullYear(),
     today.getMonth(),
-    today.getDate() - 7
+    today.getDate() - HISTORY_DEPTH
   );
 
-  // Cycle over each 24 hour period in the last week
-  for (let i = 0; i < 8; i++) {
+  // Cycle over each 24 hour period
+  while (startDate < today) {
     // Create a new day
     const day = {
-      date: new Date(oneWeekAgo),
+      date: new Date(startDate),
       hours: [] as Hour[],
     };
 
-    week.push(day);
+    history.push(day);
 
     // Cycle over each hour in the day
-    for (let j = 0; j < 24; j++) {
+    for (let i = 0; i < 24; i++) {
       const ads = [] as AdRecord[];
 
       for (const record of json.adsShownHistory) {
@@ -139,11 +149,11 @@ function getLastWeek(json: any): Week {
         const action = record.ad_content.adAction;
 
         if (
-          date.getFullYear() === oneWeekAgo.getFullYear() &&
-          date.getMonth() === oneWeekAgo.getMonth() &&
-          date.getDate() === oneWeekAgo.getDate() &&
+          date.getFullYear() === startDate.getFullYear() &&
+          date.getMonth() === startDate.getMonth() &&
+          date.getDate() === startDate.getDate() &&
           //   date.getHours() <= j
-          date.getHours() === j
+          date.getHours() === i
         ) {
           ads.push({
             time: date,
@@ -154,14 +164,14 @@ function getLastWeek(json: any): Week {
       }
 
       day.hours.push({
-        hour: j,
+        hour: i,
         adsShown: ads,
       });
     }
 
     // Increment the date by one day
-    oneWeekAgo.setDate(oneWeekAgo.getDate() + 1);
+    startDate.setDate(startDate.getDate() + 1);
   }
 
-  return week;
+  return history;
 }
