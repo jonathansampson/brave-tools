@@ -1,0 +1,46 @@
+#days {
+    display: flex;
+    gap: 1em;
+    margin: auto 1em;
+}
+
+.day {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.day h2 {
+    text-align: center;
+}
+
+.chart {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 200px;
+    border-bottom: 1px solid #000;
+    background-image:
+        linear-gradient(to bottom, white, transparent),
+        linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size:
+        100% 100%,
+        calc(100% / 24) 100%;
+}
+
+.hour {
+    cursor: pointer;
+    opacity: 0.5;
+    background-color: blue;
+    flex-grow: 1;
+}
+
+.hour:hover {
+    opacity: 1;
+}
+
+th,
+td {
+    text-align: center;
+}
