@@ -1,3 +1,4 @@
+import * as bootstrap from "bootstrap";
 import { Hour, Day, History, AdRecord } from "./types";
 
 const HISTORY_DEPTH = 30;
@@ -40,6 +41,14 @@ async function handleDrop(event: DragEvent) {
   const week = getHistory(json);
 
   renderHistory(week);
+
+  // Enable tooltips
+  const tooltipTriggerList = document.querySelectorAll(
+    '[data-bs-toggle="tooltip"]'
+  );
+  const tooltipList = [...tooltipTriggerList].map(
+    (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+  );
 }
 
 function renderHistory(history: History): void {
@@ -81,11 +90,49 @@ function renderHistory(history: History): void {
       ) as DocumentFragment;
       const hourElement = hourFragment.children[0] as HTMLElement;
 
-      hourElement.dataset.hour = hour.hour.toString();
-      hourElement.dataset.ads = hour.adsShown.length.toString();
       hourElement.style.height = `${
         (hour.adsShown.length / maxAdsShown) * 100
       }%`;
+
+      hourElement.dataset.hour = hour.hour.toString();
+      hourElement.dataset.ads = hour.adsShown.length.toString();
+
+      // Set data attributes for the types of ads shown,
+      // as well as the actions taken.
+      const types = new Map<string, number>();
+      const actions = new Map<string, number>();
+
+      for (const ad of hour.adsShown) {
+        types.set(ad.type, (types.get(ad.type) || 0) + 1);
+        actions.set(ad.action, (actions.get(ad.action) || 0) + 1);
+      }
+
+      for (const [type, count] of types) {
+        hourElement.dataset[`type:${type}`] = count.toString();
+      }
+
+      for (const [action, count] of actions) {
+        hourElement.dataset[`action:${action}`] = count.toString();
+      }
+
+      if (types.size > 0 || actions.size > 0) {
+        let summary = `<strong>Hour ${hour.hour}</strong>\n`;
+
+        for (const [type, count] of types) {
+          summary += `${count} ${type} ads.\n`;
+        }
+
+        for (const [action, count] of actions) {
+          summary += `${count} ${action} actions.\n`;
+        }
+
+        summary = summary.trim().replace(/\n/g, "<br>");
+
+        hourElement.dataset["bsHtml"] = "true";
+        hourElement.dataset["bsToggle"] = "tooltip";
+        hourElement.dataset["bsPlacement"] = "auto";
+        hourElement.dataset["bsTitle"] = summary;
+      }
 
       chartElement.appendChild(hourElement);
     }
